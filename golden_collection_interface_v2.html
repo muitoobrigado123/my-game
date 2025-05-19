@@ -1,0 +1,716 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<title>Чешская коллекция - Мини игры</title>
+<style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #eef2f7;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      color: #333;
+    }
+    h1, h2 {
+      color: #005bbb;
+      margin-bottom: 10px;
+    }
+    .menu, .minigames-list, .game-screen, #collection, #shop {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      background: white;
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .menu button, .minigames-list button, .game-screen button, #shop button {
+      margin: 10px 5px;
+      padding: 10px 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #005bbb;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .menu button:hover, .minigames-list button:hover, .game-screen button:hover, #shop button:hover {
+      background: #004499;
+    }
+    .screen {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+    .minigames-list button {
+      width: 140px;
+      height: 140px;
+      font-size: 24px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #0072ff, #00c6ff);
+      color: white;
+      box-shadow: 0 6px 10px rgba(0,198,255,0.5);
+      font-weight: 700;
+    }
+    .minigames-list button span {
+      font-size: 42px;
+      line-height: 1;
+    }
+    #catch-game-area {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      margin: 20px auto;
+      background: #dde9ff;
+      border-radius: 12px;
+      border: 2px solid #005bbb;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px #a2b9ff;
+    }
+    .falling-item {
+      position: absolute;
+      font-size: 28px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.1s ease;
+    }
+    .falling-item:hover {
+      transform: scale(1.2);
+    }
+    #catch-score {
+      font-size: 18px;
+      font-weight: 600;
+      color: #005bbb;
+    }
+    #coins-display {
+      font-weight: 700;
+      color: #0072ff;
+      font-size: 20px;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+    .collection-items, .shop-items {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+      width: 180px;
+      padding: 10px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .card img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    .card h4 {
+      margin: 10px 0 6px;
+      color: #005bbb;
+    }
+    .card p {
+      font-size: 14px;
+      color: #666;
+      min-height: 38px;
+    }
+    .card button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      font-size: 15px;
+      background: #005bbb;
+      color: white;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .card button:hover {
+      background: #004499;
+    }
+    #clicker-game-area {
+      margin: 20px auto;
+      width: 320px;
+      height: 320px;
+      background: #dde9ff;
+      border-radius: 12px;
+      border: 2px dashed #005bbb;
+      position: relative;
+      user-select: none;
+    }
+    .coin-button {
+      position: absolute;
+      padding: 8px 14px;
+      background: gold;
+      border: 1px solid #aaa;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      user-select: none;
+    }
+    #clicker-timer {
+      font-weight: 600;
+      font-size: 18px;
+      margin-top: 8px;
+      color: #005bbb;
+    }
+  
+.icon-menu {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
+
+.icon-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  text-align: center;
+  color: #333;
+  transition: transform 0.2s ease;
+}
+
+.icon-button:hover {
+  transform: scale(1.05);
+}
+
+.icon-button img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+.icon-button p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.icon-button small {
+  color: #666;
+  font-size: 12px;
+}
+
+body {
+    background: #EFE8D8 !important;
+    font-family: 'Playfair Display', serif !important;
+}
+h1 {
+    font-size: 48px !important;
+    color: #4B2E2E !important;
+    margin-bottom: 40px !important;
+}
+#main-menu {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+.menu-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 240px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.menu-tile:hover {
+    transform: scale(1.05);
+}
+.menu-tile img {
+    width: 160px;
+    height: 160px;
+}
+.menu-tile h3 {
+    font-size: 20px;
+    margin: 10px 0 4px;
+    color: #222;
+}
+.menu-tile p {
+    font-size: 14px;
+    color: #555;
+}
+.back-button {
+    margin-top: 20px;
+    padding: 10px 18px;
+    background: #4B2E2E;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#coins-display {
+    font-weight: 700;
+    color: goldenrod !important;
+    font-size: 22px;
+    margin-top: 12px;
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&amp;display=swap" rel="stylesheet"/></head>
+<body>
+<div id="home-screen">
+<h1>Golden Collection</h1>
+<div id="main-menu">
+<div class="menu-tile" onclick="navigateTo('minigames')">
+<img alt="Mini-games" src="icon_minigames.png"/>
+<h3>Mini-games</h3>
+<p>Play casual games</p>
+</div>
+<div class="menu-tile" onclick="navigateTo('collection')">
+<img alt="Collection" src="icon_collection.png"/>
+<h3>Collection</h3>
+<p>Manage your items</p>
+</div>
+<div class="menu-tile" onclick="navigateTo('shop')">
+<img alt="Shop" src="icon_shop.png"/>
+<h3>Shop</h3>
+<p>Make purchases</p>
+</div>
+</div>
+</div>
+
+
+<!-- Мини-игры -->
+<div class="screen" id="minigames">
+&lt;p&gt;Монеты: &lt;span id="coins-display"&gt;0&lt;/span&gt;&lt;/p&gt;<h2>Мини игры</h2>
+<div class="minigames-list">
+<button onclick="startGame('snake')"><span>🐍</span>Змейка</button>
+<button onclick="startGame('clicker')"><span>💰</span>Кликер</button>
+<button onclick="startGame('catch')"><span>🪙</span>Ловля монет</button>
+</div>
+<button class="back-button" onclick="goHome()">← На главную</button></div>
+<!-- Игра Кликер -->
+<div class="screen" id="clicker">
+<h2>Мини-игра: Кликер</h2>
+<p>Кликай по мешочку с монетами за 10 секунд!</p>
+<div id="clicker-game-area"></div>
+<p><button id="clicker-start-btn" onclick="startClickerGame()">Начать игру</button></p>
+<p id="clicker-timer">Осталось: 10 сек</p>
+<p>Счёт: <span id="clicker-score">0</span></p>
+<p><button onclick="backToMinigames()">Назад</button></p>
+</div>
+<!-- Игра Ловля монет -->
+<div class="screen" id="catch">
+<h2>Мини-игра: Ловля монет</h2>
+<p>Поймай падающие монеты, избегая бомб! Игра длится 20 секунд.</p>
+<div id="catch-game-area"></div>
+<p>Счёт: <span id="catch-score">0</span></p>
+<p><button id="catch-start-btn" onclick="startCatchGame()">Начать игру</button></p>
+<p><button onclick="backToMinigames()">Назад</button></p>
+</div>
+<!-- Коллекция -->
+<div class="screen" id="collection">
+&lt;p&gt;Монеты: &lt;span id="coins-display"&gt;0&lt;/span&gt;&lt;/p&gt;<h2>Коллекция</h2>
+<div class="collection-items"></div>
+<hr/>
+<h3>Магазин коллекции</h3>
+<div class="shop-items"></div>
+<h3>Задонатить любую сумму</h3>
+<input id="donate-input" min="1" placeholder="Сумма в ₽" style="padding: 8px; width: 180px;" type="number"/>
+<button onclick="redirectToPayment()">Продолжить оплату</button>
+<p><button onclick="showScreen('minigames')">Назад</button></p>
+<button class="back-button" onclick="goHome()">← На главную</button></div>
+<!-- Магазин -->
+<div class="screen" id="shop">
+&lt;p&gt;Монеты: &lt;span id="coins-display"&gt;0&lt;/span&gt;&lt;/p&gt;<h2>Магазин</h2>
+<p>Купить монеты (пока без настоящих денег):</p>
+<button onclick="buyCoins()">Купить 100 монет</button>
+<h3>Задонатить любую сумму</h3>
+<input id="donate-input" min="1" placeholder="Сумма в ₽" style="padding: 8px; width: 180px;" type="number"/>
+<button onclick="redirectToPayment()">Продолжить оплату</button>
+<p><button onclick="showScreen('minigames')">Назад</button></p>
+<button class="back-button" onclick="goHome()">← На главную</button></div>
+<p>Монеты: <span id="coins-display">0</span></p>
+<script>
+  let coins = parseInt(localStorage.getItem('coins')) || 0;
+  document.getElementById('coins-display').textContent = coins;
+
+  function showScreen(screenId){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+  }
+
+  // --- Кликер ---
+  let clickerScore = 0;
+  let clickerTimeLeft = 10;
+  let clickerTimerInterval;
+  let clickerGameActive = false;
+
+  function startClickerGame(){
+    clickerScore = 0;
+    clickerTimeLeft = 10;
+    clickerGameActive = true;
+    document.getElementById('clicker-score').textContent = clickerScore;
+    document.getElementById('clicker-timer').textContent = `Осталось: ${clickerTimeLeft} сек`;
+    document.getElementById('clicker-start-btn').disabled = true;
+
+    const gameArea = document.getElementById('clicker-game-area');
+    gameArea.innerHTML = '';
+
+    function spawnCoin(){
+      if(!clickerGameActive) return;
+
+      const coinBtn = document.createElement('button');
+      coinBtn.className = 'coin-button';
+      coinBtn.textContent = '💰';
+      coinBtn.style.top = Math.random() * (gameArea.clientHeight - 40) + 'px';
+      coinBtn.style.left = Math.random() * (gameArea.clientWidth - 40) + 'px';
+
+      coinBtn.onclick = () => {
+        if(!clickerGameActive) return;
+        clickerScore++;
+        coinBtn.remove();
+        document.getElementById('clicker-score').textContent = clickerScore;
+        spawnCoin();
+      };
+
+      gameArea.appendChild(coinBtn);
+    }
+    spawnCoin();
+
+    clickerTimerInterval = setInterval(() => {
+      clickerTimeLeft--;
+      document.getElementById('clicker-timer').textContent = `Осталось: ${clickerTimeLeft} сек`;
+      if(clickerTimeLeft <= 0){
+        clearInterval(clickerTimerInterval);
+        clickerGameActive = false;
+        coins += clickerScore;
+        updateCoinsDisplay();
+        alert(`Игра окончена! Вы заработали ${clickerScore} монет.`);
+        document.getElementById('clicker-start-btn').disabled = false;
+      }
+    }, 1000);
+  }
+
+  // --- Ловля монет ---
+  let catchScore = 0;
+  let catchGameActive = false;
+  let catchStartBtn = document.getElementById('catch-start-btn');
+  let catchGameArea = document.getElementById('catch-game-area');
+  let catchScoreElem = document.getElementById('catch-score');
+  let catchInterval;
+  let fallersInterval;
+
+  function startCatchGame(){
+    catchScore = 0;
+    catchGameActive = true;
+    catchScoreElem.textContent = catchScore;
+    catchGameArea.innerHTML = '';
+    catchStartBtn.disabled = true;
+
+    let timeLeft = 20;
+    catchInterval = setInterval(() => {
+      timeLeft--;
+      if(timeLeft <= 0){
+        endCatchGame();
+      }
+    }, 1000);
+
+    // Спавн падающих предметов (монеты и бомбы)
+    fallersInterval = setInterval(() => {
+      if(!catchGameActive) return;
+      spawnFaller();
+    }, 800);
+
+  }
+
+  function spawnFaller(){
+    if(!catchGameActive) return;
+
+    let isCoin = Math.random() < 0.7; // 70% шанс монеты, 30% бомбы
+    const item = document.createElement('div');
+    item.className = 'falling-item';
+    item.style.top = '-30px';
+    item.style.left = Math.random() * (catchGameArea.clientWidth - 30) + 'px';
+    item.textContent = isCoin ? '🪙' : '💣';
+    catchGameArea.appendChild(item);
+
+    let speed = 2 + Math.random() * 3; // скорость падения
+
+    function fall(){
+      if(!catchGameActive) return;
+      let top = parseFloat(item.style.top);
+      top += speed;
+      if(top > catchGameArea.clientHeight){
+        // Если монета упала — просто удаляем
+        catchGameArea.removeChild(item);
+      } else {
+        item.style.top = top + 'px';
+        requestAnimationFrame(fall);
+      }
+    }
+    fall();
+
+    item.onclick = () => {
+      if(!catchGameActive) return;
+      if(isCoin){
+        catchScore++;
+        coins++;
+        updateCoinsDisplay();
+        catchScoreElem.textContent = catchScore;
+      } else {
+        // Бомба — минус 1 монета, если есть
+        if(coins > 0) {
+          coins--;
+          updateCoinsDisplay();
+          alert('Бомба! Монеты потеряны.');
+        }
+      }
+      if(catchGameArea.contains(item)) catchGameArea.removeChild(item);
+    };
+  }
+
+  function endCatchGame(){
+    catchGameActive = false;
+    clearInterval(catchInterval);
+    clearInterval(fallersInterval);
+    catchStartBtn.disabled = false;
+    alert(`Игра окончена! Вы поймали ${catchScore} монет.`);
+  }
+
+  // --- Коллекция и магазин ---
+  const items = [
+    {
+      id: 'skoda',
+      name: 'Skoda Octavia',
+      image: 'skoda.jpg',
+      description: 'Легендарный чешский автомобиль.',
+      price: 50
+    },
+    {
+      id: 'bridge',
+      name: 'Карлов мост',
+      image: 'charles_bridge.jpg',
+      description: 'Известный исторический мост в Праге.',
+      price: 70
+    },
+    {
+      id: 'castle',
+      name: 'Пражский град',
+      image: 'prague_castle.jpg',
+      description: 'Один из крупнейших замков в мире.',
+      price: 90
+    },
+    {
+      id: 'city',
+      name: 'Прага',
+      image: 'prague_city.jpg',
+      description: 'Вид на старый город Праги.',
+      price: 40
+    }
+  ];
+
+  const ownedItems = JSON.parse(localStorage.getItem('collection') || '[]');
+
+  function renderCollection(){
+    const container = document.querySelector('.collection-items');
+    container.innerHTML = '';
+    items.forEach(item => {
+      if(ownedItems.includes(item.id)){
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" />
+          <h4>${item.name}</h4>
+          <p>${item.description}</p>
+        `;
+        container.appendChild(card);
+      }
+    });
+  }
+
+  function renderShopItems(){
+    const container = document.querySelector('.shop-items');
+    container.innerHTML = '';
+    items.forEach(item => {
+      if(!ownedItems.includes(item.id)){
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" />
+          <h4>${item.name}</h4>
+          <p>${item.description}</p>
+          <p><strong>${item.price} монет</strong></p>
+          <button onclick="buyItem('${item.id}')">Купить</button>
+        `;
+        container.appendChild(card);
+      }
+    });
+  }
+
+  function buyItem(itemId){
+    const item = items.find(i => i.id === itemId);
+    if(coins >= item.price){
+      coins -= item.price;
+      ownedItems.push(itemId);
+      updateCoinsDisplay();
+      localStorage.setItem('collection', JSON.stringify(ownedItems));
+      renderCollection();
+      renderShopItems();
+    } else {
+      alert('Недостаточно монет!');
+    }
+  }
+
+  function buyCoins(){
+    coins += 100;
+    updateCoinsDisplay();
+  }
+
+  function updateCoinsDisplay(){
+    localStorage.setItem('coins', coins);
+    document.getElementById('coins-display').textContent = coins;
+  }
+
+  function startGame(gameId){
+  if (gameId === 'snake') initSnakeGame();
+    showScreen(gameId);
+  }
+
+  function backToMinigames(){
+    showScreen('minigames');
+  }
+
+  // Первичная инициализация
+  renderCollection();
+  renderShopItems();
+  updateCoinsDisplay();
+  showScreen('minigames');
+
+
+// --- Змейка ---
+let snakeCanvas, snakeContext, snakeGameRunning = false;
+
+function initSnakeGame(){
+  snakeCanvas = document.getElementById('snake-canvas');
+  if (!snakeCanvas) return;
+  snakeContext = snakeCanvas.getContext('2d');
+  const grid = 16;
+  let count = 0;
+  let snake = {
+    x: 160,
+    y: 160,
+    dx: grid,
+    dy: 0,
+    cells: [],
+    maxCells: 4
+  };
+  let apple = { x: 320, y: 320 };
+
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  function resetSnakeGame(){
+    snake.x = 160;
+    snake.y = 160;
+    snake.cells = [];
+    snake.maxCells = 4;
+    snake.dx = grid;
+    snake.dy = 0;
+    apple.x = getRandomInt(0, 25) * grid;
+    apple.y = getRandomInt(0, 25) * grid;
+  }
+
+  function loop() {
+    if (!snakeGameRunning) return;
+    requestAnimationFrame(loop);
+    if (++count < 4) return;
+    count = 0;
+    snakeContext.clearRect(0,0,snakeCanvas.width,snakeCanvas.height);
+    snake.x += snake.dx;
+    snake.y += snake.dy;
+    if (snake.x < 0) snake.x = snakeCanvas.width - grid;
+    else if (snake.x >= snakeCanvas.width) snake.x = 0;
+    if (snake.y < 0) snake.y = snakeCanvas.height - grid;
+    else if (snake.y >= snakeCanvas.height) snake.y = 0;
+    snake.cells.unshift({x: snake.x, y: snake.y});
+    if (snake.cells.length > snake.maxCells) snake.cells.pop();
+    snakeContext.fillStyle = 'red';
+    snakeContext.fillRect(apple.x, apple.y, grid-1, grid-1);
+    snakeContext.fillStyle = 'green';
+    snake.cells.forEach(function(cell, index) {
+      snakeContext.fillRect(cell.x, cell.y, grid-1, grid-1);
+      if (cell.x === apple.x && cell.y === apple.y) {
+        snake.maxCells++;
+        coins++;
+        updateCoinsDisplay();
+        apple.x = getRandomInt(0, 25) * grid;
+        apple.y = getRandomInt(0, 25) * grid;
+      }
+      for (var i = index + 1; i < snake.cells.length; i++) {
+        if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+          alert("Игра окончена! Монеты сохранены.");
+          resetSnakeGame();
+        }
+      }
+    });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (!snakeGameRunning) return;
+    if (e.which === 37 && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
+    else if (e.which === 38 && snake.dy === 0) { snake.dy = -grid; snake.dx = 0; }
+    else if (e.which === 39 && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
+    else if (e.which === 40 && snake.dy === 0) { snake.dy = grid; snake.dx = 0; }
+  });
+
+  snakeGameRunning = true;
+  resetSnakeGame();
+  requestAnimationFrame(loop);
+}
+
+
+function redirectToPayment() {
+  const amount = parseInt(document.getElementById('donate-input').value);
+  if (isNaN(amount) || amount <= 0) {
+    alert("Введите корректную сумму");
+    return;
+  }
+  const paymentUrl = `https://example.com/pay?amount=${amount}`;
+  window.open(paymentUrl, '_blank');
+}
+
+
+function navigateTo(section) {
+  document.getElementById('home-screen').style.display = 'none';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(section).classList.add('active');
+}
+
+function goHome() {
+  document.getElementById('home-screen').style.display = 'block';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+}
+</script>
+<!-- Игра Змейка -->
+<div class="screen" id="snake">
+<h2>Мини-игра: Змейка</h2>
+<p>Управляй змейкой и съедай яблоки. Каждое яблоко = 1 монета.</p>
+<canvas height="400" id="snake-canvas" width="400"></canvas>
+<p><button onclick="backToMinigames()">Назад</button></p>
+</div>
+</body>
+</html>
